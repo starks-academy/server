@@ -58,11 +58,16 @@ export class AuthService {
     // Verify the signature against the nonce message
     const message = `Sign this message to authenticate with Stacks Academy.\n\nNonce: ${stored.nonce}`;
 
-    const isValid = verifyMessageSignatureRsv({
-      message,
-      signature,
-      publicKey,
-    });
+    let isValid = false;
+    try {
+      isValid = verifyMessageSignatureRsv({
+        message,
+        signature,
+        publicKey,
+      });
+    } catch (error) {
+      throw new UnauthorizedException('Invalid signature format');
+    }
 
     if (!isValid) {
       throw new UnauthorizedException('Invalid signature');
