@@ -1,9 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsString } from 'class-validator';
+import { IsObject } from 'class-validator';
 
 export class SubmitAnswersDto {
-  @ApiProperty({ type: [String], description: 'Array of answers in question order' })
-  @IsArray()
-  @IsString({ each: true })
-  answers: string[];
+  @ApiProperty({
+    type: 'object',
+    description: 'Map of question IDs to user answers',
+    example: {
+      'q1': 'a',
+      'q2': 'This is my answer to the open-ended question',
+    },
+  })
+  @IsObject()
+  answers: Record<string, string>;
 }
