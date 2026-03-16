@@ -25,10 +25,11 @@ async function bootstrap() {
   );
 
   // CORS
-  app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-    credentials: true,
-  });
+  app.enableCors({ origin: '*' })
+  // app.enableCors({
+  //   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  //   credentials: true,
+  // });
 
   // Swagger — only in non-production
   if (process.env.NODE_ENV !== 'production') {
