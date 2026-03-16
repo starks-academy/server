@@ -24,7 +24,7 @@ import { appConfig, databaseConfig, jwtConfig, anthropicConfig, stacksConfig } f
         JWT_ACCESS_EXPIRES_IN: Joi.string().default('15m'),
         JWT_REFRESH_EXPIRES_IN: Joi.string().default('7d'),
         ANTHROPIC_API_KEY: Joi.string().required(),
-        ANTHROPIC_MODEL: Joi.string().default('claude-3-5-haiku-20241022'),
+        ANTHROPIC_MODEL: Joi.string().default('claude-haiku-4-5-20251001'),
         STACKS_NETWORK: Joi.string().valid('testnet', 'mainnet').default('testnet'),
         STACKS_API_URL: Joi.string().uri().required(),
         LOG_LEVEL: Joi.string()
