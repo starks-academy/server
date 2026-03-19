@@ -20,6 +20,7 @@ import {
 import { SubmitPracticeAnswerDto } from "./dto/submit-practice-answer.dto";
 
 const MODULE_TOPICS: Record<number, string> = {
+  0: "General Stacks and Bitcoin knowledge covering all modules",
   1: "Bitcoin Fundamentals - Bitcoin basics, blockchain, mining, transactions, UTXOs",
   2: "Introduction to Stacks - Stacks blockchain, Proof of Transfer, STX token, microblocks",
   3: "Clarity Smart Contracts - Clarity language syntax, data types, functions, traits",
