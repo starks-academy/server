@@ -12,6 +12,7 @@ const MODULE_NAMES: Record<number, string> = {
   4: 'Build dApps',
   5: 'Advanced Smart Contract Patterns',
   6: 'Build Real Projects',
+  // 7: 'General'
 };
 
 @Injectable()
