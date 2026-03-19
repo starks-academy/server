@@ -9,12 +9,13 @@ import { PaginationDto } from '@app/common/dto/pagination.dto';
 import { GalleryService } from './gallery.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { GalleryQueryDto } from './dto/gallery-query.dto';
+import { ModerateProjectDto } from './dto/moderate-project.dto';
 
 @ApiTags('gallery')
 @ApiBearerAuth('JWT')
 @Controller('gallery')
 export class GalleryController {
-  constructor(private readonly galleryService: GalleryService) {}
+  constructor(private readonly galleryService: GalleryService) { }
 
   @Public()
   @Get()
@@ -52,5 +53,21 @@ export class GalleryController {
   @ApiOperation({ summary: 'Toggle upvote for a project' })
   vote(@CurrentUser() user: User, @Param('id') id: string) {
     return this.galleryService.toggleVote(user.id, id);
+  }
+
+  // ============================================================
+  // ADMIN ENDPOINTS
+  // ============================================================
+
+  @Get('admin/pending')
+  @ApiOperation({ summary: '[ADMIN] List all pending projects awaiting moderation' })
+  getPending(@Query() query: GalleryQueryDto) {
+    return this.galleryService.findPending(query);
+  }
+
+  @Patch('admin/:id/moderate')
+  @ApiOperation({ summary: '[ADMIN] Moderate a project (approve/reject)' })
+  moderate(@Param('id') id: string, @Body() dto: ModerateProjectDto) {
+    return this.galleryService.moderate(id, dto);
   }
 }
