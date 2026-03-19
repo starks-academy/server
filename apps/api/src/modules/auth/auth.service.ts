@@ -2,15 +2,15 @@ import {
   Injectable,
   UnauthorizedException,
   BadRequestException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
-import { verifyMessageSignatureRsv } from '@stacks/encryption';
+} from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { v4 as uuidv4 } from "uuid";
+import { verifyMessageSignatureRsv } from "@stacks/encryption";
 
-import { User } from '@app/database/entities/user.entity';
-import { VerifySignatureDto } from './dto/verify-signature.dto';
+import { User } from "@app/database/entities/user.entity";
+import { VerifySignatureDto } from "./dto/verify-signature.dto";
 
 // In-memory nonce store (replace with Redis in production)
 const nonceStore = new Map<string, { nonce: string; expiresAt: Date }>();
@@ -47,12 +47,16 @@ export class AuthService {
 
     const stored = nonceStore.get(walletAddress);
     if (!stored) {
-      throw new BadRequestException('No pending challenge for this wallet address');
+      throw new BadRequestException(
+        "No pending challenge for this wallet address",
+      );
     }
 
     if (new Date() > stored.expiresAt) {
       nonceStore.delete(walletAddress);
-      throw new UnauthorizedException('Challenge has expired. Please request a new one.');
+      throw new UnauthorizedException(
+        "Challenge has expired. Please request a new one.",
+      );
     }
 
     // Verify the signature against the nonce message
@@ -65,12 +69,12 @@ export class AuthService {
         signature,
         publicKey,
       });
-    } catch (error) {
-      throw new UnauthorizedException('Invalid signature format');
+    } catch {
+      throw new UnauthorizedException("Invalid signature format");
     }
 
     if (!isValid) {
-      throw new UnauthorizedException('Invalid signature');
+      throw new UnauthorizedException("Invalid signature");
     }
 
     nonceStore.delete(walletAddress);
@@ -95,7 +99,7 @@ export class AuthService {
     };
 
     const accessToken = this.jwtService.sign(payload);
-    const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
+    const refreshToken = this.jwtService.sign(payload, { expiresIn: "7d" });
 
     return { accessToken, refreshToken };
   }
