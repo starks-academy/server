@@ -86,19 +86,4 @@ describe('Assessments (e2e)', () => {
         .expect(200);
     });
   });
-
-  describe('/api/v1/assessments/quota (GET)', () => {
-    it('should require authentication', () => {
-      return request(app.getHttpServer())
-        .get('/api/v1/assessments/quota')
-        .expect(401);
-    });
-
-    it('should return quota for authenticated user', () => {
-      return request(app.getHttpServer())
-        .get('/api/v1/assessments/quota')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(200);
-    });
-  });
 });

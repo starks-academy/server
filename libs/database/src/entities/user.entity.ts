@@ -55,9 +55,6 @@ export class User extends BaseEntity {
   })
   role: UserRole;
 
-  @Column({ name: 'is_pro', default: false })
-  isPro: boolean;
-
   // Relations
   @OneToMany(() => UserProgress, (p) => p.user)
   progress: UserProgress[];

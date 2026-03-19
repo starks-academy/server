@@ -33,10 +33,4 @@ export class AssessmentsController {
   getHistory(@CurrentUser() user: User) {
     return this.assessmentsService.getHistory(user.id);
   }
-
-  @Get('quota')
-  @ApiOperation({ summary: 'Get remaining daily quiz quota' })
-  getQuota(@CurrentUser() user: User) {
-    return this.assessmentsService.getQuota(user);
-  }
 }
