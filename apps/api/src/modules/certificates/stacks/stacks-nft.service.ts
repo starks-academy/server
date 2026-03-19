@@ -1,7 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
+import { Injectable, Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { HttpService } from "@nestjs/axios";
 
 interface MintParams {
   recipientAddress: string;
@@ -36,12 +35,16 @@ export class StacksNftService {
       `[STUB] Minting certificate NFT for cert=${params.certId} module=${params.moduleId} score=${params.score} recipient=${params.recipientAddress}`,
     );
 
-    const network = this.config.get('stacks.network');
-    const apiUrl = this.config.get('stacks.apiUrl');
-    const contractAddress = this.config.get('stacks.certificateContractAddress');
-    const contractName = this.config.get('stacks.certificateContractName');
+    const network = this.config.get("stacks.network");
+    const apiUrl = this.config.get("stacks.apiUrl");
+    const contractAddress = this.config.get(
+      "stacks.certificateContractAddress",
+    );
+    const contractName = this.config.get("stacks.certificateContractName");
 
-    this.logger.debug(`Network: ${network}, Contract: ${contractAddress}.${contractName}, API: ${apiUrl}`);
+    this.logger.debug(
+      `Network: ${network}, Contract: ${contractAddress}.${contractName}, API: ${apiUrl}`,
+    );
 
     // TODO: Replace with actual Stacks transaction broadcasting
     // const { makeContractCall, broadcastTransaction } = await import('@stacks/transactions');
