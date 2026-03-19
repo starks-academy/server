@@ -18,6 +18,7 @@ import { GamificationModule } from "./modules/gamification/gamification.module";
 import { CertificatesModule } from "./modules/certificates/certificates.module";
 import { GalleryModule } from "./modules/gallery/gallery.module";
 import { BuildersModule } from "./modules/builders/builders.module";
+import { HealthModule } from "./modules/health/health.module";
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { BuildersModule } from "./modules/builders/builders.module";
     DatabaseModule,
 
     // Feature modules
+    HealthModule,
     AuthModule,
     UsersModule,
     CoursesModule,
@@ -64,4 +66,4 @@ import { BuildersModule } from "./modules/builders/builders.module";
     { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
   ],
 })
-export class AppModule {}
+export class AppModule { }

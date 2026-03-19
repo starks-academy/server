@@ -43,6 +43,7 @@ async function bootstrap() {
         { type: "http", scheme: "bearer", bearerFormat: "JWT" },
         "JWT",
       )
+      .addTag("health", "Health check endpoint")
       .addTag("auth", "Stacks wallet authentication")
       .addTag("users", "User profiles and stats")
       .addTag("courses", "Learning path and progress")
