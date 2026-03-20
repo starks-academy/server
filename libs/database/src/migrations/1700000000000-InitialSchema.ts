@@ -1,21 +1,35 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class InitialSchema1700000000000 implements MigrationInterface {
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        // Enable UUID extension
-        await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    // Enable UUID extension
+    await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
 
-        // Enums
-        await queryRunner.query(`CREATE TYPE "user_role_enum" AS ENUM('user', 'admin')`);
-        await queryRunner.query(`CREATE TYPE "step_state_enum" AS ENUM('locked', 'in_progress', 'completed')`);
-        await queryRunner.query(`CREATE TYPE "quiz_format_enum" AS ENUM('multi_choice', 'open_ended', 'mixed')`);
-        await queryRunner.query(`CREATE TYPE "message_role_enum" AS ENUM('user', 'assistant')`);
-        await queryRunner.query(`CREATE TYPE "project_category_enum" AS ENUM('DeFi', 'NFTs', 'DAOs', 'Tooling', 'Other')`);
-        await queryRunner.query(`CREATE TYPE "moderation_status_enum" AS ENUM('pending', 'approved', 'rejected')`);
-        await queryRunner.query(`CREATE TYPE "builder_category_enum" AS ENUM('Ecosystem', 'DeFi', 'NFTs', 'Tooling', 'Education')`);
+    // Enums
+    await queryRunner.query(
+      `CREATE TYPE "user_role_enum" AS ENUM('user', 'admin')`,
+    );
+    await queryRunner.query(
+      `CREATE TYPE "step_state_enum" AS ENUM('locked', 'in_progress', 'completed')`,
+    );
+    await queryRunner.query(
+      `CREATE TYPE "quiz_format_enum" AS ENUM('multi_choice', 'open_ended', 'mixed')`,
+    );
+    await queryRunner.query(
+      `CREATE TYPE "message_role_enum" AS ENUM('user', 'assistant')`,
+    );
+    await queryRunner.query(
+      `CREATE TYPE "project_category_enum" AS ENUM('DeFi', 'NFTs', 'DAOs', 'Tooling', 'Other')`,
+    );
+    await queryRunner.query(
+      `CREATE TYPE "moderation_status_enum" AS ENUM('pending', 'approved', 'rejected')`,
+    );
+    await queryRunner.query(
+      `CREATE TYPE "builder_category_enum" AS ENUM('Ecosystem', 'DeFi', 'NFTs', 'Tooling', 'Education')`,
+    );
 
-        // users
-        await queryRunner.query(`
+    // users
+    await queryRunner.query(`
       CREATE TABLE "users" (
         "id"               uuid              NOT NULL DEFAULT uuid_generate_v4(),
         "created_at"       TIMESTAMP         NOT NULL DEFAULT now(),
@@ -33,10 +47,12 @@ export class InitialSchema1700000000000 implements MigrationInterface {
         CONSTRAINT "PK_users" PRIMARY KEY ("id")
       )
     `);
-        await queryRunner.query(`CREATE UNIQUE INDEX "IDX_users_wallet_address" ON "users" ("wallet_address")`);
+    await queryRunner.query(
+      `CREATE UNIQUE INDEX "IDX_users_wallet_address" ON "users" ("wallet_address")`,
+    );
 
-        // badges
-        await queryRunner.query(`
+    // badges
+    await queryRunner.query(`
       CREATE TABLE "badges" (
         "id"                serial            NOT NULL,
         "slug"              character varying(100) NOT NULL,
@@ -50,8 +66,8 @@ export class InitialSchema1700000000000 implements MigrationInterface {
       )
     `);
 
-        // user_progress
-        await queryRunner.query(`
+    // user_progress
+    await queryRunner.query(`
       CREATE TABLE "user_progress" (
         "id"           uuid              NOT NULL DEFAULT uuid_generate_v4(),
         "created_at"   TIMESTAMP         NOT NULL DEFAULT now(),
@@ -67,8 +83,8 @@ export class InitialSchema1700000000000 implements MigrationInterface {
       )
     `);
 
-        // quiz_sessions
-        await queryRunner.query(`
+    // quiz_sessions
+    await queryRunner.query(`
       CREATE TABLE "quiz_sessions" (
         "id"               uuid               NOT NULL DEFAULT uuid_generate_v4(),
         "created_at"       TIMESTAMP          NOT NULL DEFAULT now(),
@@ -84,8 +100,8 @@ export class InitialSchema1700000000000 implements MigrationInterface {
       )
     `);
 
-        // chat_sessions
-        await queryRunner.query(`
+    // chat_sessions
+    await queryRunner.query(`
       CREATE TABLE "chat_sessions" (
         "id"                uuid      NOT NULL DEFAULT uuid_generate_v4(),
         "created_at"        TIMESTAMP NOT NULL DEFAULT now(),
@@ -98,8 +114,8 @@ export class InitialSchema1700000000000 implements MigrationInterface {
       )
     `);
 
-        // chat_messages
-        await queryRunner.query(`
+    // chat_messages
+    await queryRunner.query(`
       CREATE TABLE "chat_messages" (
         "id"          uuid                 NOT NULL DEFAULT uuid_generate_v4(),
         "created_at"  TIMESTAMP            NOT NULL DEFAULT now(),
@@ -111,8 +127,8 @@ export class InitialSchema1700000000000 implements MigrationInterface {
       )
     `);
 
-        // xp_events
-        await queryRunner.query(`
+    // xp_events
+    await queryRunner.query(`
       CREATE TABLE "xp_events" (
         "id"           uuid      NOT NULL DEFAULT uuid_generate_v4(),
         "created_at"   TIMESTAMP NOT NULL DEFAULT now(),
@@ -124,8 +140,8 @@ export class InitialSchema1700000000000 implements MigrationInterface {
       )
     `);
 
-        // user_badges
-        await queryRunner.query(`
+    // user_badges
+    await queryRunner.query(`
       CREATE TABLE "user_badges" (
         "user_id"   uuid      NOT NULL,
         "badge_id"  integer   NOT NULL,
@@ -134,8 +150,8 @@ export class InitialSchema1700000000000 implements MigrationInterface {
       )
     `);
 
-        // certificates
-        await queryRunner.query(`
+    // certificates
+    await queryRunner.query(`
       CREATE TABLE "certificates" (
         "id"           uuid      NOT NULL DEFAULT uuid_generate_v4(),
         "created_at"   TIMESTAMP NOT NULL DEFAULT now(),
@@ -151,8 +167,8 @@ export class InitialSchema1700000000000 implements MigrationInterface {
       )
     `);
 
-        // gallery_projects
-        await queryRunner.query(`
+    // gallery_projects
+    await queryRunner.query(`
       CREATE TABLE "gallery_projects" (
         "id"                uuid                      NOT NULL DEFAULT uuid_generate_v4(),
         "created_at"        TIMESTAMP                 NOT NULL DEFAULT now(),
@@ -171,8 +187,8 @@ export class InitialSchema1700000000000 implements MigrationInterface {
       )
     `);
 
-        // project_votes
-        await queryRunner.query(`
+    // project_votes
+    await queryRunner.query(`
       CREATE TABLE "project_votes" (
         "user_id"    uuid      NOT NULL,
         "project_id" uuid      NOT NULL,
@@ -181,8 +197,8 @@ export class InitialSchema1700000000000 implements MigrationInterface {
       )
     `);
 
-        // builder_profiles
-        await queryRunner.query(`
+    // builder_profiles
+    await queryRunner.query(`
       CREATE TABLE "builder_profiles" (
         "id"              uuid                     NOT NULL DEFAULT uuid_generate_v4(),
         "created_at"      TIMESTAMP                NOT NULL DEFAULT now(),
@@ -203,54 +219,102 @@ export class InitialSchema1700000000000 implements MigrationInterface {
       )
     `);
 
-        // Foreign keys
-        await queryRunner.query(`ALTER TABLE "user_progress"   ADD CONSTRAINT "FK_user_progress_user"       FOREIGN KEY ("user_id")    REFERENCES "users"("id")`);
-        await queryRunner.query(`ALTER TABLE "quiz_sessions"   ADD CONSTRAINT "FK_quiz_sessions_user"       FOREIGN KEY ("user_id")    REFERENCES "users"("id")`);
-        await queryRunner.query(`ALTER TABLE "chat_sessions"   ADD CONSTRAINT "FK_chat_sessions_user"       FOREIGN KEY ("user_id")    REFERENCES "users"("id")`);
-        await queryRunner.query(`ALTER TABLE "chat_messages"   ADD CONSTRAINT "FK_chat_messages_session"    FOREIGN KEY ("session_id") REFERENCES "chat_sessions"("id")`);
-        await queryRunner.query(`ALTER TABLE "xp_events"       ADD CONSTRAINT "FK_xp_events_user"           FOREIGN KEY ("user_id")    REFERENCES "users"("id")`);
-        await queryRunner.query(`ALTER TABLE "user_badges"     ADD CONSTRAINT "FK_user_badges_user"         FOREIGN KEY ("user_id")    REFERENCES "users"("id")`);
-        await queryRunner.query(`ALTER TABLE "user_badges"     ADD CONSTRAINT "FK_user_badges_badge"        FOREIGN KEY ("badge_id")   REFERENCES "badges"("id")`);
-        await queryRunner.query(`ALTER TABLE "certificates"    ADD CONSTRAINT "FK_certificates_user"        FOREIGN KEY ("user_id")    REFERENCES "users"("id")`);
-        await queryRunner.query(`ALTER TABLE "gallery_projects" ADD CONSTRAINT "FK_gallery_projects_user"   FOREIGN KEY ("user_id")    REFERENCES "users"("id")`);
-        await queryRunner.query(`ALTER TABLE "project_votes"   ADD CONSTRAINT "FK_project_votes_user"       FOREIGN KEY ("user_id")    REFERENCES "users"("id")`);
-        await queryRunner.query(`ALTER TABLE "project_votes"   ADD CONSTRAINT "FK_project_votes_project"    FOREIGN KEY ("project_id") REFERENCES "gallery_projects"("id")`);
-        await queryRunner.query(`ALTER TABLE "builder_profiles" ADD CONSTRAINT "FK_builder_profiles_user"   FOREIGN KEY ("submitted_by") REFERENCES "users"("id")`);
-    }
+    // Foreign keys
+    await queryRunner.query(
+      `ALTER TABLE "user_progress"   ADD CONSTRAINT "FK_user_progress_user"       FOREIGN KEY ("user_id")    REFERENCES "users"("id")`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "quiz_sessions"   ADD CONSTRAINT "FK_quiz_sessions_user"       FOREIGN KEY ("user_id")    REFERENCES "users"("id")`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "chat_sessions"   ADD CONSTRAINT "FK_chat_sessions_user"       FOREIGN KEY ("user_id")    REFERENCES "users"("id")`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "chat_messages"   ADD CONSTRAINT "FK_chat_messages_session"    FOREIGN KEY ("session_id") REFERENCES "chat_sessions"("id")`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "xp_events"       ADD CONSTRAINT "FK_xp_events_user"           FOREIGN KEY ("user_id")    REFERENCES "users"("id")`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "user_badges"     ADD CONSTRAINT "FK_user_badges_user"         FOREIGN KEY ("user_id")    REFERENCES "users"("id")`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "user_badges"     ADD CONSTRAINT "FK_user_badges_badge"        FOREIGN KEY ("badge_id")   REFERENCES "badges"("id")`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "certificates"    ADD CONSTRAINT "FK_certificates_user"        FOREIGN KEY ("user_id")    REFERENCES "users"("id")`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "gallery_projects" ADD CONSTRAINT "FK_gallery_projects_user"   FOREIGN KEY ("user_id")    REFERENCES "users"("id")`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "project_votes"   ADD CONSTRAINT "FK_project_votes_user"       FOREIGN KEY ("user_id")    REFERENCES "users"("id")`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "project_votes"   ADD CONSTRAINT "FK_project_votes_project"    FOREIGN KEY ("project_id") REFERENCES "gallery_projects"("id")`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "builder_profiles" ADD CONSTRAINT "FK_builder_profiles_user"   FOREIGN KEY ("submitted_by") REFERENCES "users"("id")`,
+    );
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "builder_profiles"  DROP CONSTRAINT "FK_builder_profiles_user"`);
-        await queryRunner.query(`ALTER TABLE "project_votes"     DROP CONSTRAINT "FK_project_votes_project"`);
-        await queryRunner.query(`ALTER TABLE "project_votes"     DROP CONSTRAINT "FK_project_votes_user"`);
-        await queryRunner.query(`ALTER TABLE "gallery_projects"  DROP CONSTRAINT "FK_gallery_projects_user"`);
-        await queryRunner.query(`ALTER TABLE "certificates"      DROP CONSTRAINT "FK_certificates_user"`);
-        await queryRunner.query(`ALTER TABLE "user_badges"       DROP CONSTRAINT "FK_user_badges_badge"`);
-        await queryRunner.query(`ALTER TABLE "user_badges"       DROP CONSTRAINT "FK_user_badges_user"`);
-        await queryRunner.query(`ALTER TABLE "xp_events"         DROP CONSTRAINT "FK_xp_events_user"`);
-        await queryRunner.query(`ALTER TABLE "chat_messages"     DROP CONSTRAINT "FK_chat_messages_session"`);
-        await queryRunner.query(`ALTER TABLE "chat_sessions"     DROP CONSTRAINT "FK_chat_sessions_user"`);
-        await queryRunner.query(`ALTER TABLE "quiz_sessions"     DROP CONSTRAINT "FK_quiz_sessions_user"`);
-        await queryRunner.query(`ALTER TABLE "user_progress"     DROP CONSTRAINT "FK_user_progress_user"`);
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE "builder_profiles"  DROP CONSTRAINT "FK_builder_profiles_user"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "project_votes"     DROP CONSTRAINT "FK_project_votes_project"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "project_votes"     DROP CONSTRAINT "FK_project_votes_user"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "gallery_projects"  DROP CONSTRAINT "FK_gallery_projects_user"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "certificates"      DROP CONSTRAINT "FK_certificates_user"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "user_badges"       DROP CONSTRAINT "FK_user_badges_badge"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "user_badges"       DROP CONSTRAINT "FK_user_badges_user"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "xp_events"         DROP CONSTRAINT "FK_xp_events_user"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "chat_messages"     DROP CONSTRAINT "FK_chat_messages_session"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "chat_sessions"     DROP CONSTRAINT "FK_chat_sessions_user"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "quiz_sessions"     DROP CONSTRAINT "FK_quiz_sessions_user"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "user_progress"     DROP CONSTRAINT "FK_user_progress_user"`,
+    );
 
-        await queryRunner.query(`DROP TABLE "builder_profiles"`);
-        await queryRunner.query(`DROP TABLE "project_votes"`);
-        await queryRunner.query(`DROP TABLE "gallery_projects"`);
-        await queryRunner.query(`DROP TABLE "certificates"`);
-        await queryRunner.query(`DROP TABLE "user_badges"`);
-        await queryRunner.query(`DROP TABLE "xp_events"`);
-        await queryRunner.query(`DROP TABLE "chat_messages"`);
-        await queryRunner.query(`DROP TABLE "chat_sessions"`);
-        await queryRunner.query(`DROP TABLE "quiz_sessions"`);
-        await queryRunner.query(`DROP TABLE "user_progress"`);
-        await queryRunner.query(`DROP TABLE "badges"`);
-        await queryRunner.query(`DROP TABLE "users"`);
+    await queryRunner.query(`DROP TABLE "builder_profiles"`);
+    await queryRunner.query(`DROP TABLE "project_votes"`);
+    await queryRunner.query(`DROP TABLE "gallery_projects"`);
+    await queryRunner.query(`DROP TABLE "certificates"`);
+    await queryRunner.query(`DROP TABLE "user_badges"`);
+    await queryRunner.query(`DROP TABLE "xp_events"`);
+    await queryRunner.query(`DROP TABLE "chat_messages"`);
+    await queryRunner.query(`DROP TABLE "chat_sessions"`);
+    await queryRunner.query(`DROP TABLE "quiz_sessions"`);
+    await queryRunner.query(`DROP TABLE "user_progress"`);
+    await queryRunner.query(`DROP TABLE "badges"`);
+    await queryRunner.query(`DROP TABLE "users"`);
 
-        await queryRunner.query(`DROP TYPE "builder_category_enum"`);
-        await queryRunner.query(`DROP TYPE "moderation_status_enum"`);
-        await queryRunner.query(`DROP TYPE "project_category_enum"`);
-        await queryRunner.query(`DROP TYPE "message_role_enum"`);
-        await queryRunner.query(`DROP TYPE "quiz_format_enum"`);
-        await queryRunner.query(`DROP TYPE "step_state_enum"`);
-        await queryRunner.query(`DROP TYPE "user_role_enum"`);
-    }
+    await queryRunner.query(`DROP TYPE "builder_category_enum"`);
+    await queryRunner.query(`DROP TYPE "moderation_status_enum"`);
+    await queryRunner.query(`DROP TYPE "project_category_enum"`);
+    await queryRunner.query(`DROP TYPE "message_role_enum"`);
+    await queryRunner.query(`DROP TYPE "quiz_format_enum"`);
+    await queryRunner.query(`DROP TYPE "step_state_enum"`);
+    await queryRunner.query(`DROP TYPE "user_role_enum"`);
+  }
 }

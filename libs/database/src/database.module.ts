@@ -26,7 +26,7 @@ import { BuilderProfile } from "./entities/builder-profile.entity";
         console.log("🔧 Database configuration:", {
           hasUrl: !!dbUrl,
           ssl,
-          nodeEnv: process.env.NODE_ENV
+          nodeEnv: process.env.NODE_ENV,
         });
 
         const base: Partial<TypeOrmModuleOptions> = {
@@ -49,12 +49,18 @@ import { BuilderProfile } from "./entities/builder-profile.entity";
           migrations: [join(__dirname, "migrations/**/*.{ts,js}")],
           migrationsRun: false, // We run migrations manually in main.ts
           synchronize: process.env.NODE_ENV === "test",
-          logging: process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test",
+          logging:
+            process.env.NODE_ENV === "development" ||
+            process.env.NODE_ENV === "test",
         };
 
         if (dbUrl) {
           console.log("✅ Using DATABASE_URL for connection");
-          return { ...base, type: "postgres", url: dbUrl } as TypeOrmModuleOptions;
+          return {
+            ...base,
+            type: "postgres",
+            url: dbUrl,
+          } as TypeOrmModuleOptions;
         }
 
         console.log("✅ Using individual DB config parameters");
@@ -73,4 +79,4 @@ import { BuilderProfile } from "./entities/builder-profile.entity";
   ],
   exports: [TypeOrmModule],
 })
-export class DatabaseModule { }
+export class DatabaseModule {}

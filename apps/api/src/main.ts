@@ -27,7 +27,7 @@ async function bootstrap() {
       console.log("📋 Checking pending migrations...");
 
       const pendingMigrations = await dataSource.showMigrations();
-      console.log(`Found ${pendingMigrations ? 'pending' : 'no'} migrations`);
+      console.log(`Found ${pendingMigrations ? "pending" : "no"} migrations`);
 
       await dataSource.runMigrations();
       console.log("✅ Database migrations applied successfully");
@@ -36,7 +36,7 @@ async function bootstrap() {
       console.error("Error details:", {
         message: err.message,
         stack: err.stack,
-        name: err.name
+        name: err.name,
       });
       process.exit(1);
     }
