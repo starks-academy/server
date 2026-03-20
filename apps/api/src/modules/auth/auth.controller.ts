@@ -9,7 +9,7 @@ import { AuthService } from "./auth.service";
 @ApiTags("auth")
 @Controller("auth")
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Public()
   @Post("challenge")
@@ -25,7 +25,12 @@ export class AuthController {
   @ApiOperation({ summary: "Verify signed challenge and receive JWT" })
   @ApiResponse({ status: 200, description: "JWT tokens issued" })
   @ApiResponse({ status: 401, description: "Invalid signature" })
-  verifySignature(@Body() dto: VerifySignatureDto) {
-    return this.authService.verifySignature(dto);
+  async verifySignature(@Body() dto: VerifySignatureDto) {
+    try {
+      return await this.authService.verifySignature(dto);
+    } catch (error) {
+      console.error("[AuthController] verifySignature error:", error);
+      throw error;
+    }
   }
 }

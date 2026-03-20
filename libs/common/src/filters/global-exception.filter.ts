@@ -32,10 +32,21 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         ? message
         : (message as any)?.message || "An error occurred";
 
-    this.logger.error(
-      `${request.method} ${request.url} → ${status}: ${errorMessage}`,
-      exception instanceof Error ? exception.stack : undefined,
-    );
+    // Enhanced logging for 500 errors
+    if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
+      this.logger.error(
+        `${request.method} ${request.url} → ${status}: ${errorMessage}`,
+      );
+      this.logger.error("Exception details:", exception);
+      if (exception instanceof Error) {
+        this.logger.error("Stack trace:", exception.stack);
+      }
+    } else {
+      this.logger.error(
+        `${request.method} ${request.url} → ${status}: ${errorMessage}`,
+        exception instanceof Error ? exception.stack : undefined,
+      );
+    }
 
     response.status(status).json({
       success: false,
