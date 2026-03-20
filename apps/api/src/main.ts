@@ -14,11 +14,30 @@ async function bootstrap() {
   // Run pending migrations on startup (skip in test environment)
   if (process.env.NODE_ENV !== "test") {
     try {
+      console.log("🔄 Running database migrations...");
       const dataSource = app.get(getDataSourceToken());
+      console.log("📊 DataSource obtained, checking connection...");
+
+      if (!dataSource.isInitialized) {
+        console.log("⚠️  DataSource not initialized, initializing now...");
+        await dataSource.initialize();
+      }
+
+      console.log("✅ DataSource connected");
+      console.log("📋 Checking pending migrations...");
+
+      const pendingMigrations = await dataSource.showMigrations();
+      console.log(`Found ${pendingMigrations ? 'pending' : 'no'} migrations`);
+
       await dataSource.runMigrations();
-      console.log("✅ Database migrations applied");
+      console.log("✅ Database migrations applied successfully");
     } catch (err) {
       console.error("❌ Migration failed:", err);
+      console.error("Error details:", {
+        message: err.message,
+        stack: err.stack,
+        name: err.name
+      });
       process.exit(1);
     }
   }

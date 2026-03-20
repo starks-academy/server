@@ -2,6 +2,9 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class InitialSchema1700000000000 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
+        // Enable UUID extension
+        await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
+
         // Enums
         await queryRunner.query(`CREATE TYPE "user_role_enum" AS ENUM('user', 'admin')`);
         await queryRunner.query(`CREATE TYPE "step_state_enum" AS ENUM('locked', 'in_progress', 'completed')`);
