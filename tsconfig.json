@@ -25,5 +25,6 @@
       "@app/config": ["libs/config/src"],
       "@app/config/*": ["libs/config/src/*"]
     }
-  }
+  },
+  "exclude": ["node_modules", "dist", "scripts"]
 }

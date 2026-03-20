@@ -36,4 +36,7 @@ export const stacksConfig = registerAs("stacks", () => ({
   certificateContractAddress: process.env.CERTIFICATE_CONTRACT_ADDRESS,
   certificateContractName:
     process.env.CERTIFICATE_CONTRACT_NAME || "stacks-academy-cert",
+  certificateImageUrl:
+    process.env.CERTIFICATE_IMAGE_URL ||
+    "https://purple-accessible-swift-921.mypinata.cloud/ipfs/bafybeicaa5ezzbru2ji2neiwamgcg4pol2i5c74lwlwvpkdogy6z5glkfm",
 }));
