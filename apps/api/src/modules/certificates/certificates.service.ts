@@ -12,15 +12,16 @@ export class CertificatesService {
     private readonly certRepo: Repository<Certificate>,
     private readonly nftService: StacksNftService,
     private readonly coursesService: CoursesService,
-  ) { }
+  ) {}
 
   async mint(userId: string, moduleId: number, score: number) {
     // Check if user has completed the entire curriculum
-    const overallProgress = await this.coursesService.getOverallProgress(userId);
+    const overallProgress =
+      await this.coursesService.getOverallProgress(userId);
 
     if (!overallProgress.isComplete) {
       throw new BadRequestException(
-        `Cannot mint certificate. Curriculum completion: ${overallProgress.progressPercentage}%. You must complete all courses (100%) to mint a certificate.`
+        `Cannot mint certificate. Curriculum completion: ${overallProgress.progressPercentage}%. You must complete all courses (100%) to mint a certificate.`,
       );
     }
 
@@ -31,7 +32,7 @@ export class CertificatesService {
 
     if (existingCert) {
       throw new BadRequestException(
-        "Certificate already minted for this user. Only one certificate per user is allowed."
+        "Certificate already minted for this user. Only one certificate per user is allowed.",
       );
     }
 
@@ -69,11 +70,16 @@ export class CertificatesService {
     return this.certRepo.findOne({ where: { id } });
   }
 
+  async getCertByTokenId(tokenId: number) {
+    return this.certRepo.findOne({ where: { nftTokenId: tokenId } });
+  }
+
   /**
    * Check if user is eligible to mint a certificate
    */
   async checkEligibility(userId: string) {
-    const overallProgress = await this.coursesService.getOverallProgress(userId);
+    const overallProgress =
+      await this.coursesService.getOverallProgress(userId);
     const existingCert = await this.certRepo.findOne({ where: { userId } });
 
     return {
@@ -82,11 +88,17 @@ export class CertificatesService {
       progressPercentage: overallProgress.progressPercentage,
       alreadyMinted: !!existingCert,
       certificate: existingCert || null,
-      message: this.getEligibilityMessage(overallProgress.isComplete, !!existingCert),
+      message: this.getEligibilityMessage(
+        overallProgress.isComplete,
+        !!existingCert,
+      ),
     };
   }
 
-  private getEligibilityMessage(isComplete: boolean, alreadyMinted: boolean): string {
+  private getEligibilityMessage(
+    isComplete: boolean,
+    alreadyMinted: boolean,
+  ): string {
     if (alreadyMinted) {
       return "You have already minted your certificate!";
     }
