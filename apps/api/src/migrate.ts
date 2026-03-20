@@ -44,6 +44,7 @@ function sanitizeDbUrl(raw: string | undefined): string | undefined {
 }
 
 function sleep(ms: number) {
+  // eslint-disable-next-line no-undef
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -57,6 +58,7 @@ async function connectWithRetry(dataSource: DataSource): Promise<void> {
       return; // success
     } catch (err) {
       lastErr = err as Error;
+      // eslint-disable-next-line no-undef
       const code = (err as NodeJS.ErrnoException).code ?? "";
       const isTransient =
         code === "ETIMEDOUT" ||
@@ -68,7 +70,9 @@ async function connectWithRetry(dataSource: DataSource): Promise<void> {
       if (!isTransient || attempt === MAX_RETRIES) break;
 
       const delay = INITIAL_RETRY_DELAY_MS * 2 ** (attempt - 1);
-      console.log(`⚠️  ${code || err.message} – retrying in ${delay / 1000}s (DB may be waking up)...`);
+      console.log(
+        `⚠️  ${code || err.message} – retrying in ${delay / 1000}s (DB may be waking up)...`,
+      );
       await sleep(delay);
     }
   }
@@ -106,10 +110,7 @@ async function runMigrations() {
       ),
     ],
     migrations: [
-      join(
-        __dirname,
-        "../../../libs/database/src/migrations/**/*.{ts,js}",
-      ),
+      join(__dirname, "../../../libs/database/src/migrations/**/*.{ts,js}"),
     ],
     // Show SQL so deployment logs capture exactly what ran.
     logging: ["migration", "error"],
